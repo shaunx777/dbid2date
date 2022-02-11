@@ -4,9 +4,9 @@
 @import "{{ site.theme }}";
 
 #ip2 {
+    filter: brightness(0.85);
     border-radius: 25px;
     color: #ffffff;
-    overflow: none;
     background-color : #1A1A1A; 
     border: 2px solid #B5E853;
     padding: 20px; 
