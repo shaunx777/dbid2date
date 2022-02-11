@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-
-# Be a fucking header
-
-testing lorem ipsum XDXDXDa
+// if you see this, you shouldnt be here but hi cutie
+# Converter
+<input type="text" id="ip2"/>
