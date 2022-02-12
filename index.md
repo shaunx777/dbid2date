@@ -2,12 +2,34 @@
 layout: default
 ---
 
+<!--- Hi you should be at https://shaunx777.github.io/dbid2date/ and not here xDxDxDDDD --->
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
 <p id="result">Your DBID: undefined</p>
 <input type="number" placeholder="" id="ip2"/>
 
-<script src=assets/javashit.js></script>
+<script>
+window.addEventListener('load', (event) => {
+  genplaceholder()
+});
+function appeartext() {
+    document.getElementById("result").style.opacity = 1
+}
+function genplaceholder() {
+    var numbers = ['69420', '666', '123456', '010101', '1337', '80085' ];
+    var randomIndex = Math.floor(Math.random() * numbers.length); 
+    var randomn = numbers[randomIndex];
+    document.getElementById("ip2").placeholder = randomn
+}
+const node = document.getElementById("ip2");
+node.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        let dbid = node.value;
+        document.getElementById("result").innerHTML = "WORK IN PROGRESS!";
+        appeartext()
+    }
+});
+</script>
 
 # What is a DBID?
 DBID is short for Database ID. In Bonk.io, it's simply an incremental identifier, a number that is assigned to your account when it's made, and then increased by one for the next user that makes their account. DBIDs began at 1 (Chaz, the game's creator) and then became 2, and some time later 100... and on the 1st of February 2022 the number surpassed **12 million**. 
@@ -25,4 +47,3 @@ Logging in to [https://bonkonauts.github.io/login/](https://bonkonauts.github.io
 ill do this later
 # Happy converting!
 i will add thanks and other shit here
-<!--- Hi you should be at https://shaunx777.github.io/dbid2date/ and not here xDxDxDDDD --->
