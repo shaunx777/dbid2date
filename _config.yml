@@ -1,5 +1,5 @@
 theme-color: #B5E853
-title: The Converter
+title: dbid2date
 description: Converts your account's DBID into a close approximation of your account creation date
 remote_theme: pages-themes/hacker@v0.2.0
 plugins:
