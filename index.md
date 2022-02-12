@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<link rel="shortcut icon" type="image/png" href="/favicon.png">
+<link rel="shortcut icon" type="image/png" href="favicon.png">
 <!--- Hi you should be at https://shaunx777.github.io/dbid2date/ and not here xDxDxDDDD --->
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
