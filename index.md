@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-<body onload="genplaceholder()">
 
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
