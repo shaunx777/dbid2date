@@ -27,11 +27,12 @@ DBID is short for Database ID. In Bonk.io, it's simply an incremental identifier
 Keep in mind this doesn't mean 12 million different people made an account, as making more than one account is obviously possible. A milestone nonetheless.
 
 # How can I get my or other people's DBID?
-Method A: Bonkonauts
+**Method A: Bonkonauts**
 
 Logging in to [https://bonkonauts.github.io/login/](https://bonkonauts.github.io/login/) and them turning to the Friends tab will present you with your DBID at the top, and your friends' DBIDs below. At the time of writing this, Bonkonauts has issues with CORS, it can only allow a limited amount of logins per hour.
 
-Method B: Bonk.io
+
+**Method B: Bonk.io**
 
 ill do this later
 # Happy converting!
