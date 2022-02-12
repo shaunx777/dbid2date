@@ -2,9 +2,9 @@
 layout: default
 ---
 
-<body onload="genplaceholder()">
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
+<body onload="genplaceholder()">
 <p id="result">Your DBID: undefined</p>
 <input type="number" placeholder="" id="ip2"/>
 
