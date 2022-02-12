@@ -3,7 +3,7 @@ layout: default
 ---
 
 # The Converter
-Simply paste your dbid into the input box and press enter!
+<p>Simply paste your dbid or any number into the input box and press enter!</p>
 <input type="number" name="dbidInput" placeholder='69420' id="ip2"/>
 
 <script>
