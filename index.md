@@ -15,7 +15,7 @@ const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
         let dbid = node.value;
-        document.getElementById("result").innerHTML = "Your DBID: " + dbid;
+        document.getElementById("result").innerHTML = "WORK IN PROGRESS!";
         appeartext()
     }
 });
