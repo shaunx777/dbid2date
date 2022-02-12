@@ -1,15 +1,22 @@
 ---
 layout: default
 ---
+<body onload="genplaceholder()">
 
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
-<p id="result">Your DBID: 69420</p>
-<input type="number" placeholder='69420' id="ip2"/>
+<p id="result">Your DBID: undefined</p>
+<input type="number" placeholder="" id="ip2"/>
 
 <script>
 function appeartext() {
     document.getElementById("result").style.opacity = 1
+}
+function genplaceholder() {
+    var numbers = ['69420', '666', '123456', '010101', '1337', '80085' ];
+    var randomIndex = Math.floor(Math.random() * numbers.length); 
+    var randomn = numbers[randomIndex];
+    document.getElementById("ip2").placeholder = randomn
 }
 const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
