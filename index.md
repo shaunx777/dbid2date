@@ -35,7 +35,7 @@ node.addEventListener("keyup", function(event) {
             document.getElementById("result").innerHTML = "Before October 2012";
         }
         else if (dbid > 12029280) {
-            document.getElementById("result").innerHTML = "After latest DBID check";
+            document.getElementById("result").innerHTML = "After February 13 2022";
         }
         else {
             document.getElementById("result").innerHTML = date;
