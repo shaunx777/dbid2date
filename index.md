@@ -1,4 +1,3 @@
-<h3 id="newheader"> DBID2DATE Converter </h3>
 ---
 layout: default
 ---
@@ -54,8 +53,9 @@ let linkDbid = window.location.search
 if (linkDbid.startsWith("?dbid=")) {
     dbid = parseInt(linkDbid.split('=')[1])
     date = dbid2date(dbid)
-    document.getElementById("newheader").textContent = date
-    console.log(date)
+    var header = document.createElement("header");
+    header.textContent = date
+    document.body.appendChild(header);
 }
 
 
