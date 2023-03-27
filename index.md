@@ -54,6 +54,8 @@ if (linkDbid.startsWith("?dbid=")) {
     dbid = parseInt(linkDbid.split('=')[1])
     date = dbid2date(dbid)
     document.querySelector('meta[property="og:title"]').setAttribute("content", date);
+    document.querySelector('meta[name="description"]').setAttribute("content", date);
+    alert(date)
 }
 
 
