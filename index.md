@@ -1,4 +1,4 @@
-<h3> this is a test.</h3>
+<h3 id="newheader"> test </h3>
 ---
 layout: default
 ---
@@ -33,10 +33,10 @@ function dbid2date(number) {
     index++;
   }
   if (index === 0) {
-    return dbids2[0].date;
+    return "Before October 1st 2012"
   }
   if (index === dbids2.length) {
-    return dbids2[dbids2.length - 1].date;
+    return "After March 27th 2023"
   }
   var date1 = new Date(dbids2[index - 1].date);
   var date2 = new Date(dbids2[index].date);
@@ -50,21 +50,20 @@ function dbid2date(number) {
   return interpolatedDate.toDateString();
 }
 
+let linkDbid = window.location.search
+if (linkDbid.startsWith("?id=")) {
+    dbid = parseInt(linkDbid.split('=')[1])
+}
+document.getElementById("newheader").textContent = dbid2date(dbid)
+
+
 const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
         let dbid = node.value;
-
-        if (dbid < 4758) {
-            document.getElementById("result").innerHTML = "Before October 1st 2012";
-        }
-        else if (dbid > 13119153) {
-            document.getElementById("result").innerHTML = "After March 27th 2023";
-        }
-        else {
-            date = dbid2date(dbid)
-            document.getElementById("result").innerHTML = date;
-        }
+        date = dbid2date(dbid)
+        document.getElementById("result").innerHTML = date;
+    }
         appeartext()
     }
 });
