@@ -1,4 +1,4 @@
-<h3 id="newheader"> test </h3>
+<h3 id="newheader"> DBID2DATE Converter </h3>
 ---
 layout: default
 ---
@@ -51,10 +51,13 @@ function dbid2date(number) {
 }
 
 let linkDbid = window.location.search
-if (linkDbid.startsWith("?id=")) {
+if (linkDbid.startsWith("?dbid=")) {
     dbid = parseInt(linkDbid.split('=')[1])
+    date = dbid2date(dbid)
+    document.getElementById("newheader").textContent = date
+    console.log(date)
 }
-document.getElementById("newheader").textContent = dbid2date(dbid)
+
 
 
 const node = document.getElementById("ip2");
@@ -65,7 +68,6 @@ node.addEventListener("keyup", function(event) {
         document.getElementById("result").innerHTML = date;
     }
         appeartext()
-    }
 });
 </script>
 
