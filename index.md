@@ -55,10 +55,10 @@ node.addEventListener("keyup", function(event) {
         let dbid = node.value;
 
         if (dbid < 4758) {
-            document.getElementById("result").innerHTML = "Before October 2012";
+            document.getElementById("result").innerHTML = "Before October 1st 2012";
         }
         else if (dbid > 13119153) {
-            document.getElementById("result").innerHTML = "After February 13 2022";
+            document.getElementById("result").innerHTML = "After March 27th 2023";
         }
         else {
             date = dbid2date(dbid)
