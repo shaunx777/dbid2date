@@ -62,11 +62,9 @@ if (linkDbid.startsWith("?dbid=")) {
 
 const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
         let dbid = node.value;
         date = dbid2date(dbid)
         document.getElementById("result").innerHTML = date;
-    }
         appeartext()
 });
 </script>
