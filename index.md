@@ -12,7 +12,24 @@ layout: default
 window.addEventListener('load', (event) => {
   genplaceholder()
 });
-function appeartext() {
+function getQueryParams() {
+    var queryParams = {};
+    var queryString = window.location.search.substring(1);
+    var params = queryString.split('&');
+    for (var i = 0; i < params.length; i++) {
+        var param = params[i].split('=');
+        var key = decodeURIComponent(param[0]);
+        var value = decodeURIComponent(param[1]);
+        queryParams[key] = value;
+    }
+    return queryParams;
+}
+var params = getQueryParams();
+var param1Value = params.param1;
+
+console.log("param1:", param1Value);
+console.log('beta build  😎')
+  function appeartext() {
     document.getElementById("result").style.opacity = 1
 }
 function genplaceholder() {
