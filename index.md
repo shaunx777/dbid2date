@@ -42,7 +42,7 @@ function dbid2date(number) {
     return "Before " + new Date(dbids2[0].date).toLocaleDateString('en-us', sexyDate)
   }
   if (index === dbids2.length) {
-    return "After " + new Date(dbids2[dbids2.length-1].date).toLocaleDateString('en-us', sexydate)
+    return "After " + new Date(dbids2[dbids2.length-1].date).toLocaleDateString('en-us', sexyDate)
   }
   var date1 = new Date(dbids2[index - 1].date);
   var date2 = new Date(dbids2[index].date);
