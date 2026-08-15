@@ -15,7 +15,7 @@ window.addEventListener('load', (event) => {
   
 let dbids2;
 const sexyDate = {weekday:"long", year:"numeric", month:"short", day:"numeric"}
-fetch('https://raw.githubusercontent.com/shaunx777/dbid2date/main/dbidanddate.json')
+fetch('https://raw.githubusercontent.com/shaunx777/dbid2date/main/dbidanddate.json?' + Math.random())
     .then(response => response.json())
     .then(data => {
       dbids2 = data
