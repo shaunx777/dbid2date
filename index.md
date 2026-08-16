@@ -19,6 +19,7 @@ fetch('https://raw.githubusercontent.com/shaunx777/dbid2date/main/dbidanddate.js
     .then(response => response.json())
     .then(data => {
       dbids2 = data
+      drawGraph(data)
     })
 function appeartext() {
     document.getElementById("result").style.opacity = 1
@@ -74,6 +75,203 @@ node.addEventListener("keyup", function(event) {
         document.getElementById("result").innerHTML = date;
         appeartext()
 });
+</script>
+
+# DBID Data
+<p>Every point below is a reference point from the JSON dataset used by the converter. Hover over a point to see the recorded DBID and date.</p>
+
+<div class="dbid-graph-wrap">
+  <svg id="dbid-graph" class="dbid-graph" role="img" aria-labelledby="dbid-graph-title dbid-graph-desc" viewBox="0 0 900 430" preserveAspectRatio="none">
+    <title id="dbid-graph-title">DBID reference points over time</title>
+    <desc id="dbid-graph-desc">A graph showing recorded Bonk.io database IDs increasing over time.</desc>
+    <g id="dbid-grid"></g>
+    <g id="dbid-axis"></g>
+    <path id="dbid-line" class="dbid-line" d=""></path>
+    <g id="dbid-points"></g>
+  </svg>
+  <div id="dbid-tooltip" class="dbid-tooltip" aria-hidden="true"></div>
+</div>
+
+<style>
+.dbid-graph-wrap {
+  position: relative;
+  width: 100%;
+  margin: 1.5em 0 2em;
+  overflow: hidden;
+}
+
+.dbid-graph {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  overflow: visible;
+  font-family: inherit;
+}
+
+.dbid-grid line,
+.dbid-axis line {
+  stroke: rgba(181, 232, 83, 0.22);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.dbid-axis text,
+.dbid-grid text {
+  fill: #B5E853;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.dbid-line {
+  fill: none;
+  stroke: #B5E853;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.dbid-point {
+  fill: #151515;
+  stroke: #B5E853;
+  stroke-width: 2;
+  cursor: crosshair;
+  vector-effect: non-scaling-stroke;
+  transition: r 0.1s ease;
+}
+
+.dbid-point:hover,
+.dbid-point:focus {
+  fill: #B5E853;
+  outline: none;
+}
+
+.dbid-tooltip {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  padding: 8px 10px;
+  border: 1px solid #B5E853;
+  background: #151515;
+  color: #B5E853;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 0 8px rgba(181, 232, 83, 0.15);
+}
+
+.dbid-graph-loading {
+  color: #B5E853;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .dbid-graph { min-height: 280px; }
+  .dbid-axis text, .dbid-grid text { font-size: 10px; }
+}
+</style>
+
+<script>
+function drawGraph(data) {
+  const svg = document.getElementById('dbid-graph');
+  const grid = document.getElementById('dbid-grid');
+  const axis = document.getElementById('dbid-axis');
+  const line = document.getElementById('dbid-line');
+  const points = document.getElementById('dbid-points');
+  const tooltip = document.getElementById('dbid-tooltip');
+  const width = 900;
+  const height = 430;
+  const margin = { top: 25, right: 25, bottom: 55, left: 78 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+
+  const parsed = data
+    .map(item => ({
+      date: new Date(item.date),
+      number: Number(item.number)
+    }))
+    .filter(item => !Number.isNaN(item.date.getTime()) && Number.isFinite(item.number))
+    .sort((a, b) => a.date - b.date);
+
+  if (!parsed.length) return;
+
+  const minDate = parsed[0].date.getTime();
+  const maxDate = parsed[parsed.length - 1].date.getTime();
+  const minNumber = Math.min(...parsed.map(item => item.number));
+  const maxNumber = Math.max(...parsed.map(item => item.number));
+  const numberRange = Math.max(1, maxNumber - minNumber);
+
+  const x = date => margin.left + ((date.getTime() - minDate) / Math.max(1, maxDate - minDate)) * plotWidth;
+  const y = number => margin.top + plotHeight - ((number - minNumber) / numberRange) * plotHeight;
+  const formatNumber = number => number.toLocaleString('en-US');
+  const formatDate = date => date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  grid.innerHTML = '';
+  axis.innerHTML = '';
+  points.innerHTML = '';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const make = (tag, attrs) => {
+    const el = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    return el;
+  };
+
+  // Horizontal gridlines and Y labels.
+  for (let i = 0; i <= 4; i++) {
+    const value = minNumber + (numberRange * i / 4);
+    const yy = y(value);
+    grid.appendChild(make('line', { x1: margin.left, x2: width - margin.right, y1: yy, y2: yy }));
+    const label = make('text', { x: margin.left - 10, y: yy + 4, 'text-anchor': 'end' });
+    label.textContent = formatNumber(Math.round(value));
+    axis.appendChild(label);
+  }
+
+  // X labels: start, middle and end dates.
+  [parsed[0], parsed[Math.floor((parsed.length - 1) / 2)], parsed[parsed.length - 1]].forEach((item, index) => {
+    const xx = x(item.date);
+    axis.appendChild(make('line', { x1: xx, x2: xx, y1: margin.top, y2: margin.top + plotHeight }));
+    const label = make('text', { x: xx, y: height - 20, 'text-anchor': index === 0 ? 'start' : (index === 2 ? 'end' : 'middle') });
+    label.textContent = item.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    axis.appendChild(label);
+  });
+
+  // Connect reference points with a line.
+  line.setAttribute('d', parsed.map((item, index) => `${index ? 'L' : 'M'} ${x(item.date).toFixed(2)} ${y(item.number).toFixed(2)}`).join(' '));
+
+  // Plot each JSON reference point.
+  parsed.forEach(item => {
+    const circle = make('circle', {
+      cx: x(item.date),
+      cy: y(item.number),
+      r: parsed.length > 250 ? 2.5 : 4,
+      class: 'dbid-point',
+      tabindex: '0',
+      'aria-label': `DBID ${formatNumber(item.number)} on ${formatDate(item.date)}`
+    });
+
+    const showTooltip = event => {
+      const rect = svg.getBoundingClientRect();
+      const scaleX = rect.width / width;
+      const left = x(item.date) * scaleX;
+      const top = y(item.number) * (rect.height / height);
+      tooltip.innerHTML = `<strong>DBID ${formatNumber(item.number)}</strong><br>${formatDate(item.date)}`;
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${Math.min(Math.max(8, left + 10), rect.width - tooltip.offsetWidth - 8)}px`;
+      tooltip.style.top = `${Math.max(8, top - tooltip.offsetHeight - 10)}px`;
+      tooltip.setAttribute('aria-hidden', 'false');
+    };
+
+    const hideTooltip = () => {
+      tooltip.style.display = 'none';
+      tooltip.setAttribute('aria-hidden', 'true');
+    };
+
+    circle.addEventListener('mouseenter', showTooltip);
+    circle.addEventListener('focus', showTooltip);
+    circle.addEventListener('mouseleave', hideTooltip);
+    circle.addEventListener('blur', hideTooltip);
+    points.appendChild(circle);
+  });
+}
 </script>
 
 # What is a DBID?
