@@ -112,16 +112,32 @@ node.addEventListener("keyup", function(event) {
   font-family: inherit;
 }
 
-.dbid-grid line,
-.dbid-axis line {
-  stroke: rgba(210, 210, 210, 0.34);
-  stroke-width: 1;
+/* Keep the plotting area inside the card, with extra room for the Y-axis labels. */
+.dbid-graph-wrap {
+  padding-left: 34px;
+  padding-right: 18px;
+  box-sizing: border-box;
+}
+
+.dbid-grid line {
+  stroke: rgba(255, 255, 255, 0.28) !important;
+  stroke-width: 1 !important;
   shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+}
+
+.dbid-axis line {
+  stroke: rgba(255, 255, 255, 0.38) !important;
+  stroke-width: 1 !important;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
 }
 
 .dbid-axis text,
-.dbid-grid text {
-  fill: #FFFFFF;
+.dbid-grid text,
+#dbid-graph text {
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
   font-size: 12px;
   font-family: inherit;
 }
@@ -183,7 +199,8 @@ function drawGraph(data) {
   const tooltip = document.getElementById('dbid-tooltip');
   const width = 900;
   const height = 430;
-  const margin = { top: 25, right: 25, bottom: 55, left: 78 };
+  /* More room on the left keeps the Y labels inside the graph card. */
+  const margin = { top: 25, right: 25, bottom: 55, left: 105 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -224,16 +241,16 @@ function drawGraph(data) {
     const value = minNumber + (numberRange * i / 4);
     const yy = y(value);
     grid.appendChild(make('line', { x1: margin.left, x2: width - margin.right, y1: yy, y2: yy }));
-    const label = make('text', { x: margin.left - 10, y: yy + 4, 'text-anchor': 'end' });
+    const label = make('text', { x: margin.left - 12, y: yy + 4, 'text-anchor': 'end', fill: '#FFFFFF' });
     label.textContent = formatNumber(Math.round(value));
     axis.appendChild(label);
   }
 
-  // X labels: start, middle and end dates.
+  // X labels and vertical gridlines: start, middle and end dates.
   [parsed[0], parsed[Math.floor((parsed.length - 1) / 2)], parsed[parsed.length - 1]].forEach((item, index) => {
     const xx = x(item.date);
-    axis.appendChild(make('line', { x1: xx, x2: xx, y1: margin.top, y2: margin.top + plotHeight }));
-    const label = make('text', { x: xx, y: height - 20, 'text-anchor': index === 0 ? 'start' : (index === 2 ? 'end' : 'middle') });
+    axis.appendChild(make('line', { x1: xx, x2: xx, y1: margin.top, y2: margin.top + plotHeight, class: 'dbid-axis-grid' }));
+    const label = make('text', { x: xx, y: height - 20, 'text-anchor': index === 0 ? 'start' : (index === 2 ? 'end' : 'middle'), fill: '#FFFFFF' });
     label.textContent = item.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     axis.appendChild(label);
   });
