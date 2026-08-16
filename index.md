@@ -50,8 +50,6 @@ node.addEventListener("keyup", function(event) {
 
 <div class="dbid-graph-wrap">
   <svg id="dbid-graph" class="dbid-graph" role="img" aria-labelledby="dbid-graph-title dbid-graph-desc" viewBox="0 0 900 430" preserveAspectRatio="xMidYMid meet">
-    <title id="dbid-graph-title">DBID reference points over time</title>
-    <desc id="dbid-graph-desc">A graph showing recorded Bonk.io database IDs increasing over time.</desc>
     <g id="dbid-grid"></g><g id="dbid-axis"></g><path id="dbid-line" class="dbid-line" d=""></path><g id="dbid-points"></g>
   </svg>
   <div id="dbid-tooltip" class="dbid-tooltip" aria-hidden="true"></div>
