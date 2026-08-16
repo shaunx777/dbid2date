@@ -83,7 +83,7 @@ function drawGraph(data) {
     const value=minNumber+(numberRange*i/4), yy=y(value);
     grid.appendChild(make('line',{x1:margin.left,x2:width-margin.right,y1:yy,y2:yy,class:i===0?'dbid-zero-axis':''}));
     // Round Y-axis labels to the nearest million for cleaner numbers.
-    const roundedMillion=Math.round(value/1000000)*1000000;
+    const roundedMillion = Math.ceil(value / 1000000) * 1000000;
     const label=make('text',{x:margin.left-12,y:yy+4,'text-anchor':'end',fill:'#fff'}); label.textContent=formatNumber(roundedMillion); axis.appendChild(label);
   }
 
