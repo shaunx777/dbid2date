@@ -77,6 +77,7 @@ node.addEventListener("keyup", function(event) {
 });
 </script>
 
+<!--- VIBE CODED: the graph below was generated with AI assistance. --->
 # DBID Data
 <p>Every point below is a reference point from the JSON dataset used by the converter. Hover over a point to see the recorded DBID and date.</p>
 
@@ -97,7 +98,10 @@ node.addEventListener("keyup", function(event) {
   position: relative;
   width: 100%;
   margin: 1.5em 0 2em;
+  padding: 12px;
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .dbid-graph {
@@ -110,14 +114,14 @@ node.addEventListener("keyup", function(event) {
 
 .dbid-grid line,
 .dbid-axis line {
-  stroke: rgba(181, 232, 83, 0.22);
+  stroke: rgba(210, 210, 210, 0.34);
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
 .dbid-axis text,
 .dbid-grid text {
-  fill: #B5E853;
+  fill: #FFFFFF;
   font-size: 12px;
   font-family: inherit;
 }
@@ -288,6 +292,8 @@ Logging in to [https://bonkonauts.github.io/login/](https://bonkonauts.github.io
 **Method B: Bonk.io**
 
 To find your own DBID through bonk, go to the login page, right click anywhere on the site and then press "Inspect". Once the inspect element tab has opened, navigate from "Elements" to "Network". This should all be found on the top right of your screen, unless your developer tools launch from the bottom. Note that you may have to click ">>" to find "Network". Once on the "Network" tab, put your username and password on the login section of bonk if it isn't there already, and click login. Under the tab that has "Name" at the top, you should find "login_legacy.php". If you can't find it, type "login" on the filter input box just below "Network". Click "login_legacy.php", then click "Preview", and locate "id". The number next to it is your DBID.
+
+To find your friends' DBID, go to the main menu, it's the screen where you see buttons such as "QUICK PLAY" or "FRIEND LIST". Follow the steps above except stay logged in. You should follow it until you are at the stage where you found the "Network" tab. Once there, click it, and then click "FRIEND LIST" in bonk. You should find "friends.php", if you don't, use the filter option. Click "Preview", and locate "id". The number next to it is your DBID.
 
 To find your friends' DBID, go to the main menu, it's the screen where you see buttons such as "QUICK PLAY" or "FRIEND LIST". Follow the steps above except stay logged in. You should follow it until you are at the stage where you found the "Network" tab. Once there, click it, and then click "FRIEND LIST" in bonk. You should find "friends.php", if you don't, use the filter option. Click "Preview", then click the little triangles that are below it. You should now see your friend list sorted by DBIDs.
 
