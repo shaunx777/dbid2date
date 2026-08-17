@@ -70,21 +70,23 @@ function drawGraph(data) {
   const plotWidth=width-margin.left-margin.right, plotHeight=height-margin.top-margin.bottom;
   const parsed=data.map(item=>({date:new Date(item.date),number:Number(item.number)})).filter(item=>!Number.isNaN(item.date.getTime())&&Number.isFinite(item.number)).sort((a,b)=>a.date-b.date);
   if(!parsed.length)return;
-  const minDate=parsed[0].date.getTime(), maxDate=parsed[parsed.length-1].date.getTime(), minNumber=Math.min(...parsed.map(item=>item.number)), maxNumber=Math.max(...parsed.map(item=>item.number)), numberRange=Math.max(1,maxNumber-minNumber);
+  const minDate=parsed[0].date.getTime(), maxDate=parsed[parsed.length-1].date.getTime(), maxNumber=Math.max(...parsed.map(item=>item.number));
+  // Start the Y-axis at 0 so the bottom-left corner is genuinely the origin, then use equal million intervals.
+  const yStep=Math.ceil((maxNumber/3)/1000000)*1000000;
+  const yMax=Math.max(yStep*3,1000000);
   const x=date=>margin.left+((date.getTime()-minDate)/Math.max(1,maxDate-minDate))*plotWidth;
-  const y=number=>margin.top+plotHeight-((number-minNumber)/numberRange)*plotHeight;
+  const y=number=>margin.top+plotHeight-(number/yMax)*plotHeight;
   const formatNumber=number=>number.toLocaleString('en-US'), formatDate=date=>date.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
   grid.innerHTML=''; axis.innerHTML=''; points.innerHTML='';
   const NS='http://www.w3.org/2000/svg';
   const make=(tag,attrs)=>{const el=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([key,value])=>el.setAttribute(key,value));return el;};
 
-  // Grey horizontal gridlines, with the bottom edge as the primary horizontal axis.
-  for(let i=0;i<=4;i++) {
-    const value=minNumber+(numberRange*i/4), yy=y(value);
+  // Horizontal gridlines at 0 and equal million intervals.
+  for(let i=0;i<=3;i++) {
+    const value=yStep*i, yy=y(value);
     grid.appendChild(make('line',{x1:margin.left,x2:width-margin.right,y1:yy,y2:yy,class:i===0?'dbid-zero-axis':''}));
-    // Round Y-axis labels to the nearest million for cleaner numbers.
-    const roundedMillion = Math.ceil(value / 1000000) * 1000000;
-    const label=make('text',{x:margin.left-12,y:yy+4,'text-anchor':'end',fill:'#fff'}); label.textContent=formatNumber(roundedMillion); axis.appendChild(label);
+    const label=make('text',{x:margin.left-12,y:yy+4,'text-anchor':'end',fill:'#fff'});
+    label.textContent=formatNumber(value); axis.appendChild(label);
   }
 
   // Grey vertical gridlines, with the first-date edge as the primary vertical axis.
