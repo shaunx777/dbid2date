@@ -5,12 +5,14 @@ layout: default
 <!--- Code rewrite ez --->
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
-<div class="converter-row"><input type="number" placeholder="" id="ip2"/><div class="result-row"><p id="result">Your DBID: undefined</p><span id="accuracy">100% accuracy</span></div></div>
+<div class="converter-row"><input type="number" placeholder="" id="ip2"/><div class="result-row"><p id="result">Your DBID: undefined</p><span id="accuracy" hidden>100% accuracy</span></div></div>
 
 <style>
-.converter-row { display:flex; align-items:baseline; gap:20px; flex-wrap:wrap; }
-.result-row { display:flex; align-items:baseline; gap:12px; }
-#accuracy { font-weight:600; transition:color .2s ease; }
+.converter-row { display:flex; align-items:baseline; gap:20px; flex-wrap:nowrap; }
+.result-row { display:flex; align-items:baseline; gap:12px; min-width:0; }
+#result { margin: 1em 0; white-space:nowrap; }
+#accuracy { font-weight:600; transition:color .2s ease; white-space:nowrap; }
+@media (max-width:600px) { .converter-row { flex-wrap:wrap; } }
 </style>
 
 <script>
@@ -50,11 +52,11 @@ function setAccuracy(number) {
     var pointDate = new Date(item.date).getTime();
     if (!Number.isNaN(pointDate)) nearestDays = Math.min(nearestDays, Math.abs(estimatedDate.getTime() - pointDate) / 86400000);
   });
-  // Confidence falls as the estimated date gets farther from the nearest real reference point.
   var accuracy = Math.max(0, Math.min(100, 100 / (1 + nearestDays / 180)));
   var el = document.getElementById("accuracy");
   el.textContent = Math.round(accuracy) + "% accuracy";
   el.style.color = "hsl(" + (accuracy * 1.2) + ", 70%, 45%)";
+  el.hidden = false;
 }
 const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
