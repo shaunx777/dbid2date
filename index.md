@@ -5,8 +5,13 @@ layout: default
 <!--- Code rewrite ez --->
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
-<p id="result">Your DBID: undefined</p>
+<div class="result-row"><p id="result">Your DBID: undefined</p><span id="accuracy">100% accuracy</span></div>
 <input type="number" placeholder="" id="ip2"/>
+
+<style>
+.result-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+#accuracy { font-weight:600; transition:color .2s ease; }
+</style>
 
 <script>
 window.addEventListener('load', (event) => { genplaceholder() });
@@ -20,21 +25,41 @@ function genplaceholder() {
     var randomn = numbers[Math.floor(Math.random() * numbers.length)];
     document.getElementById("ip2").placeholder = randomn
 }
-function dbid2date(number) {
+function getEstimatedDate(number) {
   dbids2.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
   var index = 0;
   while (index < dbids2.length && dbids2[index].number < number) index++;
-  if (index === 0) return "Before " + new Date(dbids2[0].date).toLocaleDateString('en-us', sexyDate)
-  if (index === dbids2.length) return "After " + new Date(dbids2[dbids2.length-1].date).toLocaleDateString('en-us', sexyDate)
+  if (index === 0) return new Date(dbids2[0].date);
+  if (index === dbids2.length) return new Date(dbids2[dbids2.length-1].date);
   var date1 = new Date(dbids2[index - 1].date), date2 = new Date(dbids2[index].date);
   var number1 = dbids2[index - 1].number, number2 = dbids2[index].number;
   var diff = (number - number1) / (number2 - number1);
-  return new Date(date1.getTime() + diff * (date2.getTime() - date1.getTime())).toLocaleDateString('en-us', sexyDate)
+  return new Date(date1.getTime() + diff * (date2.getTime() - date1.getTime()));
+}
+function dbid2date(number) {
+  var estimatedDate = getEstimatedDate(number);
+  if (number < dbids2[0].number) return "Before " + new Date(dbids2[0].date).toLocaleDateString('en-us', sexyDate)
+  if (number > dbids2[dbids2.length-1].number) return "After " + new Date(dbids2[dbids2.length-1].date).toLocaleDateString('en-us', sexyDate)
+  return estimatedDate.toLocaleDateString('en-us', sexyDate)
+}
+function setAccuracy(number) {
+  if (!dbids2 || !dbids2.length || !Number.isFinite(Number(number))) return;
+  var estimatedDate = getEstimatedDate(Number(number));
+  var nearestDays = Infinity;
+  dbids2.forEach(function(item) {
+    var pointDate = new Date(item.date).getTime();
+    if (!Number.isNaN(pointDate)) nearestDays = Math.min(nearestDays, Math.abs(estimatedDate.getTime() - pointDate) / 86400000);
+  });
+  // Confidence falls as the estimated date gets farther from the nearest real reference point.
+  var accuracy = Math.max(0, Math.min(100, 100 / (1 + nearestDays / 180)));
+  var el = document.getElementById("accuracy");
+  el.textContent = Math.round(accuracy) + "% accuracy";
+  el.style.color = "hsl(" + (accuracy * 1.2) + ", 70%, 45%)";
 }
 const node = document.getElementById("ip2");
 node.addEventListener("keyup", function(event) {
     let dbid = node.value; date = dbid2date(dbid)
-    document.getElementById("result").innerHTML = date; appeartext()
+    document.getElementById("result").innerHTML = date; setAccuracy(dbid); appeartext()
 });
 </script>
 
