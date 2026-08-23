@@ -5,11 +5,11 @@ layout: default
 <!--- Code rewrite ez --->
 # The Converter
 <p>Simply paste your DBID or any number into the input box and press enter!</p>
-<div class="result-row"><p id="result">Your DBID: undefined</p><span id="accuracy">100% accuracy</span></div>
-<input type="number" placeholder="" id="ip2"/>
+<div class="converter-row"><input type="number" placeholder="" id="ip2"/><div class="result-row"><p id="result">Your DBID: undefined</p><span id="accuracy">100% accuracy</span></div></div>
 
 <style>
-.result-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.converter-row { display:flex; align-items:baseline; gap:20px; flex-wrap:wrap; }
+.result-row { display:flex; align-items:baseline; gap:12px; }
 #accuracy { font-weight:600; transition:color .2s ease; }
 </style>
 
@@ -96,7 +96,6 @@ function drawGraph(data) {
   const parsed=data.map(item=>({date:new Date(item.date),number:Number(item.number)})).filter(item=>!Number.isNaN(item.date.getTime())&&Number.isFinite(item.number)).sort((a,b)=>a.date-b.date);
   if(!parsed.length)return;
   const minDate=parsed[0].date.getTime(), maxDate=parsed[parsed.length-1].date.getTime(), maxNumber=Math.max(...parsed.map(item=>item.number));
-  // Start the Y-axis at 0 so the bottom-left corner is genuinely the origin, then use equal million intervals.
   const yStep=Math.ceil((maxNumber/3)/1000000)*1000000;
   const yMax=Math.max(yStep*3,1000000);
   const x=date=>margin.left+((date.getTime()-minDate)/Math.max(1,maxDate-minDate))*plotWidth;
@@ -105,27 +104,20 @@ function drawGraph(data) {
   grid.innerHTML=''; axis.innerHTML=''; points.innerHTML='';
   const NS='http://www.w3.org/2000/svg';
   const make=(tag,attrs)=>{const el=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([key,value])=>el.setAttribute(key,value));return el;};
-
-  // Horizontal gridlines at 0 and equal million intervals.
   for(let i=0;i<=3;i++) {
     const value=yStep*i, yy=y(value);
     grid.appendChild(make('line',{x1:margin.left,x2:width-margin.right,y1:yy,y2:yy,class:i===0?'dbid-zero-axis':''}));
     const label=make('text',{x:margin.left-12,y:yy+4,'text-anchor':'end',fill:'#fff'});
     label.textContent=formatNumber(value); axis.appendChild(label);
   }
-
-  // Grey vertical gridlines, with the first-date edge as the primary vertical axis.
   [parsed[0],parsed[Math.floor((parsed.length-1)/2)],parsed[parsed.length-1]].forEach((item,index)=>{
     const xx=x(item.date);
     axis.appendChild(make('line',{x1:xx,x2:xx,y1:margin.top,y2:margin.top+plotHeight,class:index===0?'dbid-zero-axis':''}));
     const label=make('text',{x:xx,y:height-20,'text-anchor':index===0?'start':index===2?'end':'middle',fill:'#fff'});
     label.textContent=item.date.toLocaleDateString('en-US',{month:'short',year:'numeric'}); axis.appendChild(label);
   });
-
-  // Explicitly draw the two main axes so they cannot disappear through theme CSS.
   axis.appendChild(make('line',{x1:margin.left,x2:margin.left,y1:margin.top,y2:margin.top+plotHeight,class:'dbid-zero-axis'}));
   axis.appendChild(make('line',{x1:margin.left,x2:width-margin.right,y1:margin.top+plotHeight,y2:margin.top+plotHeight,class:'dbid-zero-axis'}));
-
   line.setAttribute('d',parsed.map((item,index)=>`${index?'L':'M'} ${x(item.date).toFixed(2)} ${y(item.number).toFixed(2)}`).join(' '));
   parsed.forEach(item=>{
     const circle=make('circle',{cx:x(item.date),cy:y(item.number),r:parsed.length>250?2.5:4,class:'dbid-point',tabindex:'0','aria-label':`DBID ${formatNumber(item.number)} on ${formatDate(item.date)}`});
